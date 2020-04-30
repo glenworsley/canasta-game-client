@@ -1,7 +1,8 @@
-# Read Me First
-The following was discovered as part of building this project:
+Simple player "client" for a console-based canasta game.
 
-* The original package name 'com.glenworsley.canasta-client' is invalid and this project uses 'com.glenworsley.canastaclient' instead.
+This initial version makes some assumptions:
+* the game server runs on the same localhost
+* the game server listens for socket connections on port 4001.
 
 # Getting Started
 

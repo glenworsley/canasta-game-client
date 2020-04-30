@@ -1,6 +1,7 @@
 package com.glenworsley.canastaclient;
 
 import lombok.extern.log4j.Log4j2;
+import org.json.JSONObject;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -31,11 +32,18 @@ public class CanastaClientApplication implements CommandLineRunner {
 		log.info("connected to server");
 		PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 		BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		out.println(playerName + " wants to join game " + gamecode);
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("event", "join_game");
+		jsonObject.put("playerName", playerName);
+		jsonObject.put("gamecode", gamecode);
+		log.info(playerName + " wants to join game " + gamecode);
+		out.println(jsonObject.toString());
 		String response = in.readLine();
 		log.info("response from server: {}", response);
 
 		console.printf("Hi %s!\nWaiting for the other players to join...\n", playerName);
+		String message = in.readLine();
+		log.info(message);
 		while (true) {
 			Thread.sleep(10000);
 			console.printf("Still waiting...\n");
