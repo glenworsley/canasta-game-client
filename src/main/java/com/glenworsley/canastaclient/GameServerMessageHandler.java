@@ -30,6 +30,7 @@ public class GameServerMessageHandler extends Thread {
 
     //will block waiting for a response
     public String sendMessageToServer(String message) throws IOException {
+        log.info("sending message to server");
         out.println(message);
         String response = in.readLine();
         return response;
