@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @Profile("!ContextTest")
 @Component
@@ -20,7 +20,7 @@ public class CanastaClient implements CommandLineRunner {
 
     private final GameServerMessageHandler gameServerMessageHandler;
     private final BufferedReader uiReader;
-    private final BufferedWriter uiWriter;
+    private final PrintWriter uiWriter;
 
     @Override
     public void run(String... args) throws Exception {
@@ -34,7 +34,7 @@ public class CanastaClient implements CommandLineRunner {
     }
 
     private boolean handleNextCommand() throws IOException {
-        writeMessageToUI("Please enter 1 to get a new gameCode, 2 to join a game or 3 to quit: ");
+        uiWriter.println("Please enter 1 to get a new gameCode, 2 to join a game or 3 to quit: ");
         String command = uiReader.readLine();
         if ("1".equals(command)) {
             gameCodeRequest();
@@ -42,7 +42,7 @@ public class CanastaClient implements CommandLineRunner {
             if ("2".equals(command)) {
                 joinGameRequest();
             } else {
-                writeMessageToUI("Bye!");
+                uiWriter.println("Bye!");
                 uiWriter.close();
                 uiReader.close();
                 return false;
@@ -53,15 +53,15 @@ public class CanastaClient implements CommandLineRunner {
 
     private void joinGameRequest() throws IOException {
         log.info("received request to join a game");
-        writeMessageToUI("Please enter the gameCode: ");
+        uiWriter.println("Please enter the gameCode: ");
         String gameCode = uiReader.readLine();
-        writeMessageToUI("Please enter your name: ");
+        uiWriter.println("Please enter your name: ");
         String playerName = uiReader.readLine();
         String joinGameMessage = buildJoinGameRequestJson(gameCode, playerName);
         String response = gameServerMessageHandler.sendMessageToServer(joinGameMessage);
         log.info("response from server: {}", response);
         String playerList = getPlayerListFrom(response);
-        uiWriter.write("Hi " + playerName + ". Players are: " + playerList + ". Please wait for the game to start.");
+        uiWriter.println("Hi " + playerName + ". Players are: " + playerList + ". Please wait for the game to start.");
     }
 
     private String getPlayerListFrom(String response) {
@@ -77,12 +77,7 @@ public class CanastaClient implements CommandLineRunner {
     private void gameCodeRequest() throws IOException {
         log.info("received request to get a new gameCode");
         String gameCode = gameServerMessageHandler.sendMessageToServer("{ \"event\": \"request_gameCode\" }");
-        writeMessageToUI(gameCode);
-    }
-
-    private void writeMessageToUI(String gameCode) throws IOException {
-        uiWriter.write(gameCode);
-        uiWriter.flush();
+        uiWriter.println(gameCode);
     }
 
 

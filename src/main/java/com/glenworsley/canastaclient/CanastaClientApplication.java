@@ -4,10 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 
 
 @SpringBootApplication
@@ -23,8 +20,8 @@ public class CanastaClientApplication {
 	}
 
 	@Bean
-	public BufferedWriter getOutputWriter() {
-		return new BufferedWriter(new OutputStreamWriter(System.out));
+	public PrintWriter getOutputWriter() {
+		return new PrintWriter(new OutputStreamWriter(System.out), true);
 	}
 
 }

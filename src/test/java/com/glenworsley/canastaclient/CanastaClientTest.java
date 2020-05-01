@@ -12,6 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.*;
 class CanastaClientTest {
 
     @Mock
-    private BufferedWriter uiWriter;
+    private PrintWriter uiWriter;
 
     @Mock
     private BufferedReader uiReader;
@@ -42,7 +43,7 @@ class CanastaClientTest {
         ArgumentCaptor<String> acGSMessages = ArgumentCaptor.forClass(String.class);
         canastaClient.run("");
         assertAll("ui interactions",
-                () -> verify(uiWriter, times(4)).write(acUiMessages.capture()),
+                () -> verify(uiWriter, times(4)).println(acUiMessages.capture()),
                 () -> assertEquals("Please enter 1 to get a new gameCode, 2 to join a game or 3 to quit: ", acUiMessages.getAllValues().get(0)),
                 () -> assertEquals("12345", acUiMessages.getAllValues().get(1))
         );
@@ -60,7 +61,7 @@ class CanastaClientTest {
         when(gameServerMessageHandler.sendMessageToServer(anyString())).thenReturn("{ \"success\": true, \"players\": [ \"bob\", \"sam\" ] }");
         canastaClient.run("");
         assertAll("ui interactions",
-                () -> verify(uiWriter, times(6)).write(acUiMessages.capture()),
+                () -> verify(uiWriter, times(6)).println(acUiMessages.capture()),
                 () -> assertEquals("Please enter 1 to get a new gameCode, 2 to join a game or 3 to quit: ", acUiMessages.getAllValues().get(0)),
                 () -> assertEquals("Please enter the gameCode: ", acUiMessages.getAllValues().get(1)),
                 () -> assertEquals("Please enter your name: ", acUiMessages.getAllValues().get(2)),
@@ -88,7 +89,7 @@ class CanastaClientTest {
         when(gameServerMessageHandler.sendMessageToServer(anyString())).thenReturn("{ \"success\": true, \"players\": [ \"bob\", \"sam\" ] }");
         canastaClient.run("");
         assertAll("ui interactions",
-                () -> verify(uiWriter, times(6)).write(acUiMessages.capture()),
+                () -> verify(uiWriter, times(6)).println(acUiMessages.capture()),
                 () -> assertEquals("Please enter 1 to get a new gameCode, 2 to join a game or 3 to quit: ", acUiMessages.getAllValues().get(0)),
                 () -> assertEquals("Please enter the gameCode: ", acUiMessages.getAllValues().get(1)),
                 () -> assertEquals("Please enter your name: ", acUiMessages.getAllValues().get(2)),
@@ -112,7 +113,7 @@ class CanastaClientTest {
     public void testQuit() throws Exception {
         when(uiReader.readLine()).thenReturn("3");
         canastaClient.run("");
-        verify(uiWriter, times(2)).write(anyString());
+        verify(uiWriter, times(2)).println(anyString());
     }
 
 
