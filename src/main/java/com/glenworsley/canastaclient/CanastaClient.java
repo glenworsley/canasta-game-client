@@ -27,28 +27,31 @@ public class CanastaClient implements CommandLineRunner {
         log.info("starting client");
         gameServerMessageHandler.start();
 
-        boolean quit = false;
-        while (handleNextCommand()) {
-            //
+        uiWriter.println("Please enter 1 to get a new gameCode, 2 to join a game or 3 to quit: ");
+        String uiCommand;
+        while ((uiCommand = uiReader.readLine()) != null) {
+            actionUICommand(uiCommand);
+            if ("3".equals(uiCommand)) break; //quit
         }
     }
 
-    private boolean handleNextCommand() throws IOException {
-        uiWriter.println("Please enter 1 to get a new gameCode, 2 to join a game or 3 to quit: ");
-        String command = uiReader.readLine();
-        if ("1".equals(command)) {
+    private void actionUICommand(String uiCommand) throws IOException {
+        log.info("actioning command: {}", uiCommand);
+        //String command = uiReader.readLine();
+        if ("1".equals(uiCommand)) {
+            log.info("in gamecode request branch");
             gameCodeRequest();
+            uiWriter.println("Please enter 1 to get a new gameCode, 2 to join a game or 3 to quit: ");
         } else {
-            if ("2".equals(command)) {
+            if ("2".equals(uiCommand)) {
                 joinGameRequest();
+                uiWriter.println("Please enter 1 to get a new gameCode, 2 to join a game or 3 to quit: ");
             } else {
                 uiWriter.println("Bye!");
                 uiWriter.close();
                 uiReader.close();
-                return false;
             }
         }
-        return true;
     }
 
     private void joinGameRequest() throws IOException {
