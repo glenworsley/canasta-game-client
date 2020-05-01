@@ -26,6 +26,15 @@ public class GameServerMessageHandler extends Thread {
         out = new PrintWriter(socket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         log.info("connected to server");
+        String messageFromServer;
+        while ((messageFromServer = in.readLine()) != null) {
+            handleMessageFromServer(messageFromServer);
+        }
+     }
+
+    private void handleMessageFromServer(String messageFromServer) {
+        log.info("received message from server: {}", messageFromServer);
+
     }
 
     //will block waiting for a response
