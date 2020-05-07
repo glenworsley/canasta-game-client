@@ -1,24 +1,39 @@
 package com.glenworsley.canastaclient;
 
-import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("ContextTest")
 @SpringBootTest
 class CanastaClientApplicationTests {
 
+	@Autowired
+	private ClientMessageHandler clientMessageHandler;
+
+	@Autowired
+	private ServerMessageHandler serverMessageHandler;
+
+	@Autowired
+	private BufferedReader playerMessageReader;
+
+	@Autowired
+	private BufferedReader serverMessageReader;
+
 	@Test
 	void contextLoads() {
+
+		assertThat(clientMessageHandler).isNotNull();
+		assertThat(serverMessageHandler).isNotNull();
+		assertThat(playerMessageReader).isNotNull();
+		assertThat(serverMessageReader).isNotNull();
+		assertThat(clientMessageHandler.getPlayerMessageReader()).isNotNull();
+
 	}
 
 }
