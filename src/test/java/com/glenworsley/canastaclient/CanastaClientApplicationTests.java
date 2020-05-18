@@ -25,6 +25,9 @@ class CanastaClientApplicationTests {
 	@Autowired
 	private BufferedReader serverMessageReader;
 
+	@Autowired
+	private UICommandInterpreterImpl uiCommandInterpreter;
+
 	@Test
 	void contextLoads() {
 
@@ -33,6 +36,7 @@ class CanastaClientApplicationTests {
 		assertThat(playerMessageReader).isNotNull();
 		assertThat(serverMessageReader).isNotNull();
 		assertThat(clientMessageHandler.getPlayerMessageReader()).isNotNull();
+		assertThat(uiCommandInterpreter).isNotNull();
 
 	}
 
